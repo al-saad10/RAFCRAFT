@@ -1,0 +1,110 @@
+{% extends 'admin-base.html' %}
+{% block body %}
+<div class="container">
+    <!-- Display success message -->
+{% if messages %}
+<div class="row">
+  <div class="col s12">
+    {% for message in messages %}
+    <div class="card green lighten-4">
+      <div class="card-content">
+        <span class="green-text text-darken-2">{{ message }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+    <section class="section">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Subcategories</h3>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="input-field">
+                            <input type="hidden" name="available_product">
+                            <select name="available_product" class="browser-default">
+                                <option value="" disabled selected>Choose product</option>
+                                {% for product in all_product_objects %}
+                                <option value="{{ product.id }}">{{ product.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+            
+                        <div class="input-field">
+                            <select name="add_product_inventory" class="browser-default">
+                                <option value="In stock">In stock</option>
+                                <option value="Stock out">Stock out</option>
+                            </select>
+                        </div>
+            
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition duration-200 mt-4">Add Product Inventory Status</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <table class="table" id="subcategory_table">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Product Name</th>
+                            <th>Update Product status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product_inventory_status in products_with_invenotry_status %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ product_inventory_status.product.name }}</td> <!-- Display category name -->
+    
+                            <td>
+                                <!-- Form for updating subcategory name -->
+
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_inventory_status_id" value="{{ product_inventory_status.id }}">
+                                    <select name="product_availability" class="browser-default">
+                                        <option value="In stock" {% if product_inventory_status.availability == "In stock" %} selected {% endif %}>In stock</option>
+                                        <option value="Stock out" {% if product_inventory_status.availability == "Stock out" %} selected {% endif %}>Stock out</option>
+                                        <!-- Make the current status unselectable -->
+                                        <option value="{{ product_inventory_status.availability }}" selected disabled>Current Status: {{ product_inventory_status.quantity_available }}</option>
+                                    </select>
+                                    <button type="submit" class="waves-effect waves-light btn-small green"> Update status</button>
+                                </form>
+                                
+                                
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('select');
+      var instances = M.FormSelect.init(elems);
+  
+      // Hide success message after 2 seconds
+      setTimeout(function() {
+        var successMessages = document.querySelectorAll('.green-text');
+        successMessages.forEach(function(message) {
+          message.parentElement.parentElement.remove();
+        });
+      }, 2000);
+    });
+  </script>
+      {% endblock %}

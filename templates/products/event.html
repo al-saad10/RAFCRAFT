@@ -1,0 +1,64 @@
+{% extends 'master.html' %}
+
+{% block body %}
+
+<!-- breadcrumb -->
+<div class="container py-4 flex items-center gap-3">
+    <a href="{% url 'index' %}" class="text-primary text-base">
+    </a>
+    <p class="text-gray-600 font-medium">{{event_instance}} Offer</p>
+</div>
+<!-- ./breadcrumb -->
+
+<!-- shop wrapper -->
+<div class="container grid md:grid-cols-3 grid-cols-2 gap-6 pt-4 pb-16 items-start">
+    <div class="col-span-3">
+        <div class="flex items-center mb-4">
+            <select name="sort" id="sort"
+                class="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary">
+                <option value="">Default sorting</option>
+                <option value="price-low-to-high">Price low to high</option>
+                <option value="price-high-to-low">Price high to low</option>
+                <option value="latest">Latest product</option>
+            </select>
+        </div>
+
+        <div class="grid md:grid-cols-4 grid-cols-4 gap-6">
+            {% for product, first_image in products_with_images %}
+            <div class="bg-white shadow rounded overflow-hidden group">
+                <div class="relative">
+                    {% if first_image %}
+                    <img src="{{ first_image.image.url }}" alt="product 1" class="w-full">
+                    {% endif %}
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center
+                        justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                    </div>
+                </div>
+                <div class="pt-4 pb-3 px-4">
+                    <a href="{% url 'detail_product_view' product.id %}">
+                        <h4 class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
+                            {{product.name}}</h4>
+                    </a>
+                    <div class="flex items-baseline mb-1 space-x-2 font-roboto mt-4">
+                        <p class="text-xl text-primary font-semibold">{{product.discounted_price}} Tk</p>
+                        <p class="text-base text-gray-400 line-through">{{product.price}} Tk</p>
+                    </div>
+                </div>
+                <div class="px-5 py-4 mt-6 flex flex-col sm:flex-row gap-3 border-b border-gray-200">
+                    <a href="{% url 'direct_checkout' product.id%}" class="bg-primary border border-primary text-white px-4 py-2 font-small rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
+                        <i class="fa fa-shopping-bag"></i> Buy Now
+                    </a>
+                    <a href="{% url 'add_to_cart' product.id %}" class="bg-primary border border-primary text-white px-4 py-2 font-small rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ./products -->
+</div>
+<!-- ./shop wrapper -->
+
+{% endblock %}

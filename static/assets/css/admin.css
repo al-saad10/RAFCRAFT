@@ -1,0 +1,85 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5; /* Light grey background */
+    margin: 0;
+    padding: 0;
+  }
+  .container1 {
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .row{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 20px 65px;
+    padding-bottom: 100px;
+
+  }
+  
+  .ad-heading{
+    font-size: 25px;
+    padding-top: 50px;
+  }
+
+  .card1 {
+    width: 525px;
+    height: 100px;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+    background-color: #5f93e7; /* Green background */
+    color: #ffffff; /* White font color */
+    text-align: center;
+  }
+  .card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  }
+  .card-content1 a {
+    color: #ffffff; /* White link color */
+    text-decoration: none;
+    font-size: 20px;
+    text-align: center;
+  }
+  .card-content1 a:hover {
+    text-decoration: underline;
+  }
+  .card-content1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  .card-content1 a:hover {
+    text-decoration: underline;
+  }
+  .modal-content {
+    font-size: 16px;
+    color: #333333;
+  }
+  .modal-footer {
+    background: linear-gradient(135deg, #1976d2, #2196f3); /* Gradient background for the modal footer */
+    display: flex;
+    justify-content: flex-end;
+  }
+  .modal-footer a {
+    color: #ffffff; /* White font color */
+    font-size: 16px;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  .modal-footer a:hover {
+    background-color: #0d47a1; /* Darker blue on hover */
+  }
+  @media only screen and (max-width: 768px) {
+    .card {
+      width: 80%; /* Adjust width for smaller screens */
+    }
+  }

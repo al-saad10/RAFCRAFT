@@ -1,0 +1,117 @@
+{% extends 'master.html' %}
+
+{% load static %}
+
+{% block body %}
+
+    <!-- login -->
+    <div class="container py-16">
+        <div class="max-w-md mx-auto bg-white rounded shadow-lg overflow-hidden">
+            <div class="px-6 py-4">
+                <h2 class="text-center text-3xl text-primary font-bold mb-4">Login</h2>
+                <form method="post" autocomplete="off">
+                    {% csrf_token %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if message.tags == 'error' %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="messageBox">
+                                <strong>Oops!</strong> {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <div class="space-y-3">
+                        <div>
+                            <label for="username" class="text-gray-700 mb-2 block">User Name</label>
+                            <input type="text" name="username" id="username"
+                                class="block w-full border border-gray-300 px-4 py-3 text-gray-700 text-base rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                                placeholder="username">
+                        </div>
+                        <div>
+                            <label for="password" class="text-gray-700 mb-2 block">Password</label>
+                            <div class="relative">
+                                <input type="password" name="password" id="password"
+                                    class="block w-full border border-gray-300 px-4 py-3 text-gray-700 text-base rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                                    placeholder="*******">
+                                <span toggle="#password" class="absolute top-4 right-2 m-2 fa fa-fw fa-eye field-icon toggle-password"></span>
+                            </div>
+                            <script>
+                                const togglePassword = document.querySelector('.toggle-password');
+                                const password = document.querySelector('#password');
+
+                                togglePassword.addEventListener('click', function () {
+                                    if (password.type === 'password') {
+                                        password.type = 'text';
+                                        togglePassword.classList.toggle('fa-eye-slash');
+                                    } else {
+                                        password.type = 'password';
+                                        togglePassword.classList.remove('fa-eye-slash');
+                                    }
+                                });
+                            </script>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between mt-6">
+                        <a href="{% url 'password_reset' %}" class="text-primary">Forgot password?</a>
+                    </div>
+                    <div class="mt-6">
+                        <button type="submit"
+                            class="w-full py-3 text-primary uppercase font-medium mb-1 bg-white border border-primary rounded hover:bg-primary text-primary">Login</button>
+                    </div>
+                </form>
+            </div>
+            <div class="px-6 py-4 bg-gray-100">
+                <p class="text-center text-gray-600">New to our site? <a href="{% url 'handle_register' %}"
+                        class="text-primary">Create
+                        an account</a></p>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        #messageBox {
+            transition: all 0.2s ease-in-out;
+            border-radius: 10px;
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 0.5s;
+        }
+
+        .fade-enter,
+        .fade-leave-to {
+            opacity: 0;
+        }
+    </style>
+
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get the message box element
+            const messageBox = document.getElementById("messageBox");
+
+            // Check if the message box exists
+            if (messageBox) {
+                // Add a CSS class to apply the transition effect
+                messageBox.classList.add("fade-enter-active");
+
+                // Remove the message box after a delay
+                setTimeout(function () {
+                    messageBox.remove();
+                }, 3000);
+            }
+        });
+    </script>
+
+</div>
+<!-- ./login -->
+{% endblock %}

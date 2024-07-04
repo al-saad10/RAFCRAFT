@@ -1,0 +1,126 @@
+{% extends 'admin-base.html' %}
+{% load static %}
+{% block body %}
+  <div class="container1">
+    <p class="ad-heading">Select The Menu You Want to Visit!</p>
+    <div class="row">
+      <div class="">
+        <div class="card1 hoverable">
+          <div class="card-content1">
+            <!-- Clickable text inside the box -->
+            <a href="#" id="openModal">Pending Orders ({{ order_count }})</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="">
+        <div class="card1 hoverable">
+          <div class="card-content1">
+            <!-- Clickable text inside the box -->
+            <a href="{% url 'admin_category_management'%}" id="openModal">Categories ({{ category_object_count }})</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="">
+        <div class="card1 hoverable">
+          <div class="card-content1">
+            <!-- Clickable text inside the box -->
+            <a href="{% url 'admin_subcategory_management'%}" id="openModal">Subcategories ({{ subcategory_object_count }})</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="">
+        <div class="card1 hoverable">
+          <div class="card-content1">
+            <!-- Clickable text inside the box -->
+            <a href="{% url 'admin_product_management'%}" id="openModal">Product Management</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="">
+        <div class="card1 hoverable">
+          <div class="card-content1">
+            <!-- Clickable text inside the box -->
+            <a href="{% url 'admin_event_management'%}" id="openModal">Running Events ({{ slider_item_object_count }})</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="">
+        <div class="card1 hoverable">
+          <div class="card-content1">
+            <!-- Clickable text inside the box -->
+            <a href="{% url 'admin_customer_datails_management'%}" id="openModal">Regular Users ({{ regular_users_count }})</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Modal Structure -->
+<div id="modal1" class="modal" style="background-color: #2E3192;">
+  <div class="modal-content" style="background-color: #ffffff; color: #333333;">
+    <h4>All the Pending Orders</h4>
+    <table class="highlight">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>User</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Company</th>
+          <th>Address</th>
+          <th>Order Note</th>
+          <th>Details</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ order.first_name }} {{ order.last_name }}</td>
+          <td>{{ order.phone }}</td>
+          <td>{{ order.email }}</td>
+          <td>{{ order.company }}</td>
+          <td>{{ order.address }} {{ order.city }} {{ order.country }}</td>
+          <td>{{ order.order_note }}</td>
+          <td><a href="{% url 'admin_order_item_management' order.id %}" class="modal-close waves-effect waves-green btn-flat" style="color: #333333;">View Details</a></td>
+          <td>
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="order_id" value="{{ order.id }}">
+              <button type="submit" class="btn-delete" style="background-color: #ff5252; color: #ffffff;">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer" style="background-color: #2E3192; color: #ffffff;">
+    <a href="#!" class="modal-close" style="color: #ffffff;">Close</a>
+  </div>
+</div>
+
+  <!-- Materialize JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    // Initialize modal
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('.modal');
+      var instances = M.Modal.init(elems);
+    });
+
+    // Open modal when text is clicked
+    document.getElementById('openModal').addEventListener('click', function(){
+      var modal = document.getElementById('modal1');
+      var instance = M.Modal.getInstance(modal);
+      instance.open();
+    });
+  </script>
+
+  {% endblock %}

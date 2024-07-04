@@ -1,0 +1,210 @@
+{% extends 'admin-base.html' %}
+{% load static %}
+{% block body %}
+  <style>
+    h4 {
+      color: #333;
+    }
+    th, td {
+      color: #555;
+      text-align: center; /* Center-align text */
+      padding: 8px; /* Add padding */
+    }
+    .container {
+      margin-top: 20px;
+
+    }
+    .bg_color {
+      background-color: #ebe9e9;
+      border-radius: 28px;
+      padding: 40px 40px;
+      color: black;
+      font-family: 'Poppins', sans-serif;
+    }
+    .card {
+      margin-top: 20px;
+    }
+    .btn {
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-save {
+      background-color: #4CAF50; /* Green */
+    }
+    .btn-delete {
+      background-color: #f44336; /* Red */
+    }
+    /* Responsive Table */
+    .responsive-table {
+      overflow-x: auto;
+    }
+    /* Soft Colors */
+    .green-text {
+      color: #4CAF50; /* Green */
+    }
+    .red-text {
+      color: #f44336; /* Red */
+    }
+    /* Form Input Fields */
+    input[type="text"], select {
+      border-radius: 5px;
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    /* Form Select */
+    .input-field {
+      margin-bottom: 10px;
+    }
+    /* Buttons */
+    .btn-small {
+      margin-right: 10px;
+    }
+    @media only screen and (max-width: 600px) {
+      /* Adjustments for small screens */
+      .btn-small {
+        display: block;
+        margin-bottom: 10px;
+      }
+    }
+    /* Set table width to 100% */
+    table {
+      width: 100%;
+    }
+  </style>
+
+  <div class="container">
+    <div class="bg_color">
+    <!-- Display success message -->
+    {% if messages %}
+    <div class="row">
+      <div class="col s12">
+        {% for message in messages %}
+        <div class="card green lighten-4">
+          <div class="card-content">
+            <span class="green-text text-darken-2">{{ message }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    
+    <!-- Add buttons -->
+    <div class="right-align">
+      <a href="{% url 'admin_add_product_management' %}" class="btn btn-small">Add Product</a>
+      <a href="{% url 'admin_add_product_image_management' %}" class="btn btn-small">Add Image</a>
+      <a href="{% url 'admin_product_inventory_management' %}" class="btn btn-small">Manage Inventory</a>
+    </div>
+    
+    <h4>Product</h4>
+    <!-- Existing form for updating products -->
+    {% if all_products_object %}
+    <div class="responsive-table">
+      <table class="striped">
+        <thead>
+          <tr>
+            <th>SL No</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Discounted Price</th>
+            <th>Category</th>
+            <th>Subcategory</th>
+            <th>Quantity</th>
+            <th>Event</th>
+            <th>Material</th>
+            <th>Weight</th>
+            <th>Warranty Year</th>
+            <th>Warranty Policy</th>
+            <th>Save</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in all_products_object %}
+          <tr>
+            <form method="post" id="update-product-form">
+              {% csrf_token %}
+              <td>{{ forloop.counter }}</td>
+              <input type="hidden" name="product_id" value="{{ product.id }}">
+              <td><input type="text" name="name" value="{{ product.name }}"></td>
+              <td><input type="text" name="description" value="{{ product.description }}"></td>
+              <td><input type="text" name="price" value="{{ product.price }}"></td>
+              <td><input type="text" name="discounted_price" value="{{ product.discounted_price }}"></td>
+              <td>
+                <div class="input-field">
+                  <input type="hidden" name="category_id">
+                  <select name="category_id" class="browser-default">
+                    <option value="{{ product.category.id }}" selected>{{ product.category.name }}</option>
+                    {% for category in category_objects %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </td>
+              <td>
+                <div class="input-field">
+                  <input type="hidden" name="subcategory_id">
+                  <select name="subcategory_id" class="browser-default">
+                    <option value="{{ product.subcategory.id }}" selected>{{ product.subcategory.name }}</option>
+                    {% for subcategory in subcategory_objects %}
+                    <option value="{{ subcategory.id }}">{{ subcategory.name }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </td>
+              <td><input type="text" name="quantity" value="{{ product.quantity }}"></td>
+              <td>
+                <div class="input-field">
+                  <select name="event" class="browser-default">
+                    
+                    <option value="{{ product.event }}" selected disabled>Current Status: {{ product.event }}</option>
+                    {% for event in all_event_objects %}
+                    <option value="{{ event.id }}">{{ event.event }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </td>
+              <td><input type="text" name="material" value="{{ product.material }}"></td>
+              <td><input type="text" name="weight" value="{{ product.weight }}"></td>
+              <td><input type="text" name="warranty_year" value="{{ product.warranty_year }}"></td>
+              <td><input type="text" name="warranty_policy" value="{{ product.warranty_policy }}"></td>
+              <td>
+                <button type="submit" class="btn btn-save font-black"><i class="fas fa-save"></i> Save</button>
+              </td>
+            </form>
+            <td>
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="delete_product" value="{{ product.id }}">
+                <button type="submit" class="btn btn-delete"><i class="fas fa-trash"></i> Delete</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </div>
+  </div>
+
+  <!-- Materialize JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('select');
+      var instances = M.FormSelect.init(elems);
+
+      // Hide success message after 2 seconds
+      setTimeout(function() {
+        var successMessages = document.querySelectorAll('.green-text');
+        successMessages.forEach(function(message) {
+          message.parentElement.parentElement.remove();
+        });
+      }, 2000);
+    });
+  </script>
+
+  {% endblock %}

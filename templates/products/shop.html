@@ -1,0 +1,94 @@
+{% extends 'master.html' %}
+
+{% block body %}
+
+<!-- breadcrumb -->
+<div class="container py-4 flex items-center gap-3">
+    <a href="{% url 'index' %}" class="text-primary text-base">
+    </a>
+    <p class="text-gray-600 font-medium">Shop</p>
+</div>
+<!-- ./breadcrumb -->
+
+<!-- shop wrapper -->
+<div class="container grid md:grid-cols-3 grid-cols-2 gap-6 pt-4 pb-16 items-start sm:py-4">
+    <div class="col-span-3">
+        <div class="flex items-center mb-4">
+            <select name="sort" id="sort"
+                class="w-36 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary">
+                <option value="">Default sorting</option>
+                <option value="price-low-to-high">Price low to high</option>
+                <option value="price-high-to-low">Price high to low</option>
+                <option value="latest">Latest product</option>
+            </select>
+
+            <div class="flex gap-2 ml-auto">
+                <div class="dropdown" style="position: relative; display: inline-block;" onmouseover="toggleDropdown('dropdownMenu1')" onmouseout="closeDropdown('dropdownMenu1')">
+                    <div class="border border-gray-300 w-24 h-9 flex items-center justify-center text-primary rounded cursor-pointer dropdown-toggle" id="dropdownMenuButton1" aria-expanded="false" style="position: relative; font-size: 0.90rem; background-color: #fd3d57; color: white;" onmouseover="this.style.backgroundColor='white'; this.style.color='#fd3d57';" onmouseout="this.style.backgroundColor='#fd3d57'; this.style.color='white';">
+                        <span style="margin: 0 auto;">Solutions</span> 
+                    </div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1" id="dropdownMenu1" style="position: absolute; display: none; right: 0; background-color: white; box-shadow: 0 4px 6px hsla(0, 74%, 12%, 0.1); border: 1px solid #ccc; border-radius: 4px; z-index: 1; min-width: 100%;" onmouseover="keepDropdownOpen('dropdownMenu1')" onmouseout="closeDropdown('dropdownMenu1')">
+                        {% for subcategory in sub_categories %}
+                        <a class="dropdown-item" href="{% url 'subcategory_detail' subcategory.name %}" style="display: block; padding: 8px 7px; color: #fd3d57; text-decoration: none; width: 100%; text-align: center; border-bottom: 1px solid #ccc;" onmouseover="this.style.backgroundColor='#fd3d57'; this.style.color='white';" onmouseout="this.style.backgroundColor='white'; this.style.color='#fd3d57';">{{subcategory.name}}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="dropdown" style="position: relative; display: inline-block;" onmouseover="toggleDropdown('dropdownMenu2')" onmouseout="closeDropdown('dropdownMenu2')">
+                    <div class="border border-gray-300 w-24 h-9 flex items-center justify-center text-primary rounded cursor-pointer dropdown-toggle" id="dropdownMenuButton2" aria-expanded="false" style="position: relative; font-size: 0.90rem; background-color: #fd3d57; color: white;" onmouseover="this.style.backgroundColor='white'; this.style.color='#fd3d57';" onmouseout="this.style.backgroundColor='#fd3d57'; this.style.color='white';">
+                        <span style="margin: 0 auto;">Category</span>
+
+                    </div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2" id="dropdownMenu2" style="position: absolute; display: none; right: 0; background-color: white; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border: 1px solid #ccc; border-radius: 4px; z-index: 1; min-width: 100%;" onmouseover="keepDropdownOpen('dropdownMenu2')" onmouseout="closeDropdown('dropdownMenu2')">
+                        {% for category in categories %}
+                        <a class="dropdown-item" href="{% url 'each_category_products' category.name %}" style="display: block; padding: 8px 7px; color: #fd3d57; text-decoration: none; width: 100%; text-align: center; border-bottom: 1px solid #ccc;" onmouseover="this.style.backgroundColor='#fd3d57'; this.style.color='white';" onmouseout="this.style.backgroundColor='white'; this.style.color='#fd3d57';">{{category.name}}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+                
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {% for product in products %}
+            {% if product.images.all %}
+            <div class="bg-white shadow rounded overflow-hidden group">
+                <div class="relative">
+                    <img src="{{ product.images.first.image.url }}" alt="product 1" class="w-full">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center
+                        justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                    </div>
+                </div>
+                <div class="pt-4 pb-3 px-4">
+                    <a href="{% url 'detail_product_view' product.id %}">
+                        <h4 class="uppercase font-medium text-base md:text-xl mb-2 text-gray-800 hover:text-primary transition h-10">
+                            {{product.name}}</h4>
+                    </a>
+                    <div class="flex items-baseline mb-1 space-x-2">
+                        <p class="text-base md:text-xl text-primary font-semibold">{{product.discounted_price}}</p>
+                        <p class="text-sm text-gray-400 line-through">{{product.price}}</p>
+                    </div>
+                </div>
+                
+                <div class="px-5 py-4 mt-2 flex flex-col sm:flex-row gap-2 border-b border-gray-200">
+                    <a href="{% url 'direct_checkout' product.id%}" class="flex justify-center items-center bg-primary border border-primary text-white px-4 py-2 font-small rounded lowercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition sm:justify-center">
+                            <i class="fa fa-shopping-bag"></i>
+                        <span class="hidden md:inline">Buy Now</span>
+                    </a>
+                    <a href="{% url 'add_to_cart' product.id %}" class="flex justify-center items-center bg-primary border border-primary text-white px-4 py-2 font-small rounded lowercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition sm:justify-center">
+                            <i class="fas fa-shopping-cart"></i>
+                        <span class="hidden md:inline">Add to Cart</span>
+                    </a>
+                </div>
+                
+            </div>
+
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ./products -->
+</div>
+<!-- ./shop wrapper -->
+
+{% endblock %}

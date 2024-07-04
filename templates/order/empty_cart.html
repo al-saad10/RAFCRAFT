@@ -1,0 +1,42 @@
+{% extends 'master.html' %}
+
+{% block body %}
+{% load static %}
+
+<!-- <div class="container mt-5">
+    <div  class="row">
+        <h3 class="text-center">You have no product in your cart</h3>
+        <div class="text-center">
+            <img src="{% static 'assets/images/empty_cart.png' %}" alt="" class="img-fluid img-thumbnail w-25 mt-5">
+        </div>
+    </div>
+</div> -->
+    <!-- <div class="bg-cover bg-no-repeat bg-center bg-fixed py-36" style="background-image: url('/static/assets/images/emptycart.png');">
+        <div class="container">
+            <h1 class="text-6xl text-gray-800 font-medium mb-4 capitalize">
+                Your Cart is Empty!
+            </h1>
+            <p>Looks like your cart is empty. Fill it up with our amazing products and celebrate Eid in style with our exquisite decorations,
+                <br> adding a touch of joy and elegance to your home festivities.</p>
+            <div class="mt-12">
+                <a href="{% url 'shop' %}" class="bg-primary border border-primary text-white px-8 py-3 font-medium 
+                    rounded-md hover:bg-transparent hover:text-primary">Explore Products</a>
+            </div>
+        </div>
+    </div> -->
+    <div class="bg-cover md:bg-no-repeat bg-center md:bg-fixed py-36" style="background-image: url('/static/assets/images/carrt1.png');">
+        <div class="container">
+            <h1 class="text-6xl text-gray-800 font-medium mb-4 capitalize">
+                Your Cart is Empty!
+            </h1>
+            <p>Looks like your cart is empty. Fill it up with our amazing products and celebrate Eid in style with our exquisite decorations, 
+                <br> adding a touch of joy and elegance to your home festivities.</p>
+            <div class="mt-12">
+                <a href="{% url 'shop' %}" class="bg-primary border border-primary text-white px-8 py-3 font-medium 
+                    rounded-md hover:bg-transparent hover:text-primary">Explore Products</a>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends 'admin-base.html' %}
+{% load static %}
+{% block body %}
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+
+    .box-design1{
+      background-color: #ebe9e9;
+      border-radius: 28px;
+      padding: 40px 40px;
+      color: black;
+      font-family: 'Poppins', sans-serif;
+    }
+    h4 {
+      color: #333;
+    }
+    th, td {
+      color: #555;
+    }
+    .container {
+      margin-top: 20px;
+      padding: 0 15px; /* Add padding for better spacing */
+    }
+    .card {
+      margin-top: 20px;
+    }
+    .btn {
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-save {
+      background-color: #4CAF50; /* Green */
+    }
+    .btn-delete {
+      background-color: #f44336; /* Red */
+    }
+    /* Custom styling */
+    .card-content {
+      padding: 10px 15px;
+    }
+    .table-container {
+      overflow-x: auto; /* Enable horizontal scrolling for small screens */
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 5px;
+      overflow: hidden; /* Hide overflowing content */
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2; /* Alternate row colors */
+    }
+    @media only screen and (max-width: 600px) {
+      th, td {
+        font-size: 14px; /* Reduce font size for small screens */
+      }
+    }
+  </style>
+  <div class="container">
+    <div class="box-design1">
+    <!-- Display success message -->
+    {% if messages %}
+    <div class="row">
+      <div class="col s12">
+        {% for message in messages %}
+        <div class="card green lighten-4">
+          <div class="card-content">
+            <span class="green-text text-darken-2">{{ message }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    
+    <h4>Regular User</h4>
+    <div class="table-container">
+      <table class="striped">
+        <thead>
+          <tr>
+            <th>SL No</th>
+            <th>Name</th>
+            <th>Email Address</th>
+            <th>Phone</th>
+            <th>Gender</th>
+            <th>Status</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>Country</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Example order items, replace with actual data from your backend -->
+          {% if regular_users_count == 0 %}
+          <tr><td colspan="7">No User available</td></tr>
+          {% else %}
+          {% for user, user_details in user_addresses %}
+          <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ user.first_name }} {{ user.last_name }}</td>
+              <td>{{ user.email }}</td>
+              {% if user_details %}
+                <td>{{ user_details.phone }}</td>
+                <td>{{ user_details.gender }}</td>
+                <td><span>Customer</span></td> 
+                <td>{{ user_details.street }}</td>
+                <td>{{ user_details.city }}</td>
+                <td>{{ user_details.country }}</td>
+            {% else %}
+                <td colspan="6">User details not available!</td>
+            {% endif %}
+              <td>
+                  <form method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="delete_user" value="{{ user.id }}">
+                      <button type="submit" class="btn btn-delete"><i class="fas fa-trash"></i> Delete</button>
+                  </form>
+              </td>
+          </tr>
+          {% endfor %}
+          {% endif %}
+          <!-- Add more rows for additional order items -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+
+  <!-- Materialize JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('select');
+      var instances = M.FormSelect.init(elems);
+  
+      // Hide success message after 2 seconds
+      setTimeout(function() {
+        var successMessages = document.querySelectorAll('.green-text');
+        successMessages.forEach(function(message) {
+          message.parentElement.parentElement.remove();
+        });
+      }, 2000);
+    });
+  </script>
+
+  {% endblock %}

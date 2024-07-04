@@ -1,0 +1,219 @@
+{% extends 'admin-base.html' %}
+{% load static %}
+{% block body %}
+<style>
+    body {
+        background-color: #f5f5f5;
+    }
+
+    .section {
+        background-color: #ebe9e9;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    th,td {
+        color: #555;
+        padding: 25px;
+      }
+
+    .bg-gray-200 {
+        background-color: #f9fafb;
+    }
+
+    .text-gray-800 {
+        color: #22292f;
+    }
+
+    .text-gray-600 {
+        color: #71717a;
+    }
+
+    .border {
+        border-color: #d1d5db;
+    }
+
+    .border-gray-300 {
+        border-color: #e2e8f0;
+    }
+
+    .bg-blue-500 {
+        background-color: #3b82f6;
+    }
+
+    .bg-blue-600 {
+        background-color: #2563eb;
+    }
+
+    .bg-green-500 {
+        background-color: #10b981;
+    }
+
+    .bg-green-600 {
+        background-color: #059669;
+    }
+
+    .bg-red-500 {
+        background-color: #dc2626;
+    }
+
+    .bg-red-600 {
+        background-color: #b91c1c;
+    }
+
+    .hover\:bg-blue-600:hover {
+        background-color: #2563eb;
+    }
+
+    .hover\:bg-green-600:hover {
+        background-color: #059669;
+    }
+
+    .hover\:bg-red-600:hover {
+        background-color: #b91c1c;
+    }
+
+    button:focus {
+        outline: none;
+    }
+</style>
+    <div class="container">
+        <!-- Display success message -->
+    {% if messages %}
+    <div class="row">
+      <div class="col s12">
+        {% for message in messages %}
+        <div class="card green lighten-4">
+          <div class="card-content">
+            <span class="green-text text-darken-2">{{ message }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+        <section class="section">
+            <div class="row">
+                <div class="col-md-6">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="input-field">
+                                <input type="hidden" name="available_product">
+                                <select name="available_product" class="browser-default">
+                                    <option value="" disabled selected>Choose product</option>
+                                    {% for product in all_product_objects %}
+                                    <option value="{{ product.id }}">{{ product.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                
+                            <!-- Input field for image -->
+                            <div class="file-field input-field col s12">
+                                <div class="btn">
+                                    <span>Upload Image</span>
+                                    <input type="file" name="add_product_image">
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text">
+                                </div>
+                            </div>
+                
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition duration-200 mt-4">Add Product Image</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <table class="table" id="subcategory_table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Product Name</th>
+                                <th>Image</th>
+                                <th>Update Product Image</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for productimage in products_with_images %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ productimage.product.name }}</td> <!-- Display category name -->
+                                <td>
+                                    {% if productimage.image %}
+                                    <img src="{{ productimage.image.url }}" alt="{{ productimage.product.name }}" style="max-width: 100px; max-height: 100px;">
+                                    {% else %}
+                                    No image available
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <!-- Form for updating subcategory name -->
+
+                                    <!-- Form for updating subcategory image -->
+                                    <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="productimage_id" value="{{ productimage.id }}">
+                                        <div class="file-field input-field col s12">
+                                            <div class="btn">
+                                                <span>Upload Image</span>
+                                                <input type="file" name="update_product_image">
+                                            </div>
+                                            <div class="file-path-wrapper">
+                                                <input class="file-path validate" type="text">
+                                            </div>
+                                            <button type="submit" class="waves-effect waves-light btn-small green"> Update Image</button>
+                                        </div>
+                                        <!-- <div class="file-field input-field col s12">
+                                            <div class="btn">
+                                                <span>Upload Image</span>
+                                                <input type="file" name="update_product_image">
+                                            </div>
+                                            <div class="file-path-wrapper">
+                                                <input class="file-path validate" type="text">
+                                            </div>
+                                            <button type="submit" class="waves-effect waves-light btn-small green"><i class="material-icons">done</i> Update Image</button>
+                                        </div> -->
+                                    </form>
+
+                                </td>
+                                <td>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="delete_product_image" value="{{ productimage.id }}">
+                                        <button type="submit" class="waves-effect waves-light btn-small red" onclick="return confirm('Are you sure you want to delete this subcategory?')">Delete image</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
+        });
+      </script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          var elems = document.querySelectorAll('select');
+          var instances = M.FormSelect.init(elems);
+      
+          // Hide success message after 2 seconds
+          setTimeout(function() {
+            var successMessages = document.querySelectorAll('.green-text');
+            successMessages.forEach(function(message) {
+              message.parentElement.parentElement.remove();
+            });
+          }, 2000);
+        });
+      </script>
+      
+      {% endblock %}

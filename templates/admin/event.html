@@ -1,0 +1,181 @@
+{% extends 'admin-base.html' %}
+{% load static %}
+{% block body %}
+
+<style>
+    body {
+        background-color: #f5f5f5;
+    }
+
+    .section {
+        background-color: #ebe9e9;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    th,td {
+        color: #555;
+        padding: 25px;
+      }
+
+    .bg-gray-200 {
+        background-color: #f9fafb;
+    }
+
+    .text-gray-800 {
+        color: #22292f;
+    }
+
+    .text-gray-600 {
+        color: #71717a;
+    }
+
+    .border {
+        border-color: #d1d5db;
+    }
+
+    .border-gray-300 {
+        border-color: #e2e8f0;
+    }
+
+    .bg-blue-500 {
+        background-color: #3b82f6;
+    }
+
+    .bg-blue-600 {
+        background-color: #2563eb;
+    }
+
+    .bg-green-500 {
+        background-color: #10b981;
+    }
+
+    .bg-green-600 {
+        background-color: #059669;
+    }
+
+    .bg-red-500 {
+        background-color: #dc2626;
+    }
+
+    .bg-red-600 {
+        background-color: #b91c1c;
+    }
+
+    .hover\:bg-blue-600:hover {
+        background-color: #2563eb;
+    }
+
+    .hover\:bg-green-600:hover {
+        background-color: #059669;
+    }
+
+    .hover\:bg-red-600:hover {
+        background-color: #b91c1c;
+    }
+
+    button:focus {
+        outline: none;
+    }
+</style>
+    <div class="container">
+        <section class="section">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 style="text-align: center; font-size:30px; font-family: 'Poppins', sans-serif">Event</h3>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input placeholder="Enter event name" id="add_event_name" type="text" class="validate" name="add_event_name" required>
+                                <label for="add_event_name">Event Name</label>
+                            </div>
+                
+                            <!-- Input field for image -->
+                            <div class="file-field input-field col s12">
+                                <div class="btn">
+                                    <span>Upload Image</span>
+                                    <input type="file" name="add_event_image">
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text">
+                                </div>
+                            </div>
+                
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition duration-200 mt-4">Add Event</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <table id="event_table" class="highlight responsive-table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Event Name</th>
+                                <th>Image</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for event in event_objects %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ event.event }}</td>
+                                <td>
+                                    {% for event_image in event.images.all %}
+                                    {% if event_image.image %}
+                                    <img src="{{ event_image.image.url }}" alt="{{ event.name }}" style="max-width: 100px; max-height: 100px;">
+                                    {% else %}
+                                    No image available
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    <!-- Form for updating event name -->
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="event_id" value="{{ event.id }}">
+                                        <div class="input-field" style="padding-left:12px;">
+                                            <input type="text" name="update_event_name" value="{{ event.event }}" placeholder="Update Event Name">
+                                            <button type="submit" class="waves-effect waves-light btn-small green"> Update Name</button>
+                                        </div>
+                                    </form>
+
+                                    <!-- Form for updating event image -->
+                                    <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="event_id" value="{{ event.id }}">
+                                        <div class="file-field input-field col s12">
+                                            <div class="btn">
+                                                <span>Upload Image</span>
+                                                <input type="file" name="update_event_image">
+                                            </div>
+                                            <div class="file-path-wrapper">
+                                                <input class="file-path validate" type="text">
+                                            </div>
+                                            <button type="submit" class="waves-effect waves-light btn-small green"> Update Image</button>
+                                        </div>
+                                    </form>
+
+                                </td>
+                                <td>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="delete_event_object" value="{{ event.id }}">
+                                        <button type="submit" class="waves-effect waves-light btn-small red" onclick="return confirm('Are you sure you want to delete this event?')">Delete Event</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+    {% endblock %}

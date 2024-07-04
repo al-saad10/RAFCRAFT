@@ -1,0 +1,190 @@
+{% extends 'master.html' %}
+
+{% block body %}
+
+<!-- breadcrumb -->
+<div class="container py-4 flex items-center gap-3">
+    <a href="../index.html" class="text-primary text-base">
+        <i class="fa-solid fa-house"></i>
+    </a>
+    <span class="text-sm text-gray-400">
+        <i class="fa-solid fa-chevron-right"></i>
+    </span>
+    <p class="text-gray-600 font-medium">Profile</p>
+</div>
+<!-- ./breadcrumb -->
+
+<!-- wrapper -->
+<div class="container grid grid-cols-1 md:grid-cols-12 items-start gap-6 pt-4 pb-16">
+
+    <!-- sidebar -->
+    <div class="md:col-span-3">
+        <div class="px-4 py-3 shadow flex items-center gap-4">
+            <div class="flex-shrink-0">
+                <img src="/static/assets/images/avatar.png" alt="profile"
+                    class="rounded-full w-14 h-14 border border-gray-200 p-1 object-cover">
+            </div>
+            <div class="flex-grow">
+                <p class="text-gray-600">Hello,</p>
+                <h4 class="text-gray-800 font-medium">{{ request.user.username }}</h4>
+            </div>
+        </div>
+
+        <div class="mt-6 bg-white shadow rounded p-4 divide-y divide-gray-200 space-y-4 text-gray-600">
+            <div class="space-y-1 pl-8">
+                <a href="{% url 'profile' %}" class="relative hover:text-primary block capitalize transition">
+                    Profile information
+                </a>
+
+                <a href="{% url 'change_password' %}" class="relative hover:text-primary block capitalize transition">
+                    Change password
+                </a>
+
+                <a href="{% url 'order_history' %}"
+                    class="relative hover:text-primary block font-medium capitalize transition">
+                    <span class="absolute -left-8 top-0 text-base">
+                        <i class="fa-solid fa-box-archive"></i>
+                    </span>
+                    My order history
+                </a>
+
+                <a href="{% url 'logout' %}"
+                    class="relative hover:text-primary block font-medium capitalize transition">
+                    <span class="absolute -left-8 top-0 text-base">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </span>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- ./sidebar -->
+
+    <div class="md:col-span-9 shadow rounded px-6 pt-5 pb-7">
+    <h4 class="text-primary text-lg font-medium capitalize mb-4">
+        Profile information
+    </h4>
+    <br>
+    <form id="profile" method="post">
+        {% csrf_token %}
+        <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="first_name">First name</label>
+                    <input type="text" name="first_name" id="first_name" class="input-box" value="{{ user.first_name }}" readonly>
+                    <small class="text-danger">{{ form.first_name.errors|striptags }}</small>
+                </div>
+                <div>
+                    <label for="last_name">Last name</label>
+                    <input type="text" name="last_name" id="last_name" class="input-box" value="{{ user.last_name }}" readonly>
+                    <small class="text-danger">{{ form.last_name.errors|striptags }}</small>
+                </div>
+            </div>
+            
+            
+
+            <div>
+                <label for="email">Email Address</label>
+                <input type="email" name="email" id="email" class="input-box" value="{{ user.email }}" readonly>
+                <small class="text-danger">{{ form.email.errors|striptags }}</small>
+            </div>
+            
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                
+                
+                <div>
+                    <label for="phone">Phone number</label>
+                    <input type="text" name="phone" id="phone" class="input-box" value="{% if profile %}{{ profile.phone }}{% endif %}">
+                    <small class="text-danger">{{ form.phone.errors|striptags }}</small>
+                </div>
+                <div>
+                    <label for="gender">Gender</label>
+                    <select name="gender" id="gender" class="input-box">
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                        <option value="O">Other</option>
+                    </select>
+                    <small class="text-danger">{{ form.gender.errors|striptags }}</small>
+                </div>
+            </div>
+            <!-- New section for address -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="country">Country</label>
+                    <input type="text" name="country" id="country" class="input-box" value="{% if profile %}{{ profile.country }}{% endif %}">
+                    <small class="text-danger">{{ form.country.errors|striptags }}</small>
+                </div>
+                <div>
+                    <label for="city">City</label>
+                    <input type="text" name="city" id="city" class="input-box" value="{% if profile %}{{ profile.city }}{% endif %}">
+                    <small class="text-danger">{{ form.city.errors|striptags }}</small>
+                </div>
+            </div>
+            <div>
+                <label for="street" class="">Address</label>
+                <input type="text" name="street" id="street" class="input-box" value="{% if profile %}{{ profile.street }}{% endif %}">
+                <small class="text-danger">{{ form.street.errors|striptags }}</small>
+            </div>
+            
+        </div>
+        <div class="mt-4">
+            <button type="submit" class="py-3 px-4 text-primary font-medium border border-primary rounded-md hover:bg-transparent">Save Changes</button>
+        </div>
+    </form>
+    {% if messages %}
+        <div class="mt-4">
+            {% for message in messages %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="messageBox">
+                <strong>{{ message }}</strong> 
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+<style>
+    #messageBox {
+        transition: all 0.2s ease-in-out;
+        border-radius: 10px;
+        background-color: rgba(255, 0, 0, 0.7);
+        color: white;
+        padding: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity 0.5s;
+    }
+
+    .fade-enter,
+    .fade-leave-to {
+        opacity: 0;
+    }
+</style>
+
+<script>
+    // Wait for the DOM to be fully loaded
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get the message box element
+        const messageBox = document.getElementById("messageBox");
+
+        // Check if the message box exists
+        if (messageBox) {
+            // Add a CSS class to apply the transition effect
+            messageBox.classList.add("fade-enter-active");
+
+            // Remove the message box after a delay
+            setTimeout(function () {
+                messageBox.remove();
+            }, 2000);
+        }
+    });
+</script>
+
+</div>
+<!-- ./wrapper -->
+
+{% endblock %}

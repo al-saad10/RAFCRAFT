@@ -1,0 +1,130 @@
+{% extends 'admin-base.html' %}
+{% load static %}
+{% block body %}
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+    h4 {
+      color: #333;
+    }
+    th, td {
+      color: #555;
+    }
+    .container {
+      margin-top: 20px;
+    }
+    .card {
+      margin-top: 20px;
+    }
+    .btn {
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-save {
+      background-color: #4CAF50; /* Green */
+    }
+    .btn-delete {
+      background-color: #f44336; /* Red */
+    }
+  </style>
+  <div class="container">
+    <!-- Display success message -->
+    {% if messages %}
+    <div class="row">
+      <div class="col s12">
+        {% for message in messages %}
+        <div class="card green lighten-4">
+          <div class="card-content">
+            <span class="green-text text-darken-2">{{ message }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    
+    <h4>Order Items</h4>
+    <table class="striped">
+      <thead>
+        <tr>
+          <th>Order No</th>
+          <th>Product Name</th>
+          <th>Product Quantity</th>
+          <th>Product Price</th>
+          <th>Product Status</th>
+          <th>Action</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Example order items, replace with actual data from your backend -->
+        {% if pending_order_items_count == 0 %}
+        <tr><td colspan="7">No items available</td></tr>
+        {% else %}
+        {% for order_item in pending_order_items %}
+        <tr>
+            <td>{{ order_item.id }}</td>
+            <td>{{ order_item.product.name }}</td>
+            <td>{{ order_item.quantity }}</td>
+            <td>{{ order_item.product_price }}</td>
+            <td>
+              <form id="statusForm{{ order_item.id }}" method="post" action="/order_item/{{ order_item.id }}">
+                  {% csrf_token %}
+                  <input type="hidden" name="order_item_status">
+                  <div class="input-field">
+                      <select name="order_item_status" class="browser-default">
+                          <option value="Order Pending" {% if order_item.status == "Order Pending" %} selected {% endif %}>Order Pending</option>
+                          <option value="Accepted" {% if order_item.status == "Accepted" %} selected {% endif %}>Accepted</option>
+                          <option value="Cancel" {% if order_item.status == "Cancel" %} selected {% endif %}>Cancel</option>
+                          <option value="Packed" {% if order_item.status == "Packed" %} selected {% endif %}>Packed</option>
+                          <option value="On The Way" {% if order_item.status == "On The Way" %} selected {% endif %}>On The Way</option>
+                          <option value="Delivered" {% if order_item.status == "Delivered" %} selected {% endif %}>Delivered</option>
+                      </select>
+                  </div>
+              </form>
+            </td>          
+            <td>
+                <button onclick="document.getElementById('statusForm{{ order_item.id }}').submit()" class="btn btn-save"><i class="fas fa-save"></i> Save</button>
+            </td>
+            <td>
+                <form method="post" action="/order_item/{{ order_item.id }}">
+                    {% csrf_token %}
+                    <input type="hidden" name="order_item_id">
+                    <button type="submit" class="btn btn-delete"><i class="fas fa-trash"></i> Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+        <!-- Add more rows for additional order items -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Materialize JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('select');
+      var instances = M.FormSelect.init(elems);
+  
+      // Hide success message after 2 seconds
+      setTimeout(function() {
+        var successMessages = document.querySelectorAll('.green-text');
+        successMessages.forEach(function(message) {
+          message.parentElement.parentElement.remove();
+        });
+      }, 2000);
+    });
+  </script>
+
+  {% endblock %}

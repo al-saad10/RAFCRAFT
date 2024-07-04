@@ -1,0 +1,136 @@
+{% extends 'master.html' %}
+
+{% block body %}
+
+ <!-- login -->
+    <div class="contain py-16">
+        <div class="max-w-lg mx-auto shadow px-6 py-7 rounded overflow-hidden">
+            <h2 class="text-center text-primary uppercase font-medium mb-1">Create an account</h2>
+            <br>
+            <form action="{% url 'handle_register' %}" method="post" autocomplete="off">
+                {% csrf_token %}
+                {% if messages %}
+                        {% for message in messages %}
+                            {% if message.tags == 'error' %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="messageBox">
+                                <strong>Oops!</strong> {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                <div class="space-y-2">
+                    <div>
+                        <label for="username" class="text-gray-600 mb-2 block">User Name</label>
+                        <input type="text" name="username" id="username"
+                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                            placeholder="username">
+                            <small class="text-danger">{{ form.username.errors|striptags }}</small>
+                    </div>
+                    <div>
+                        <label for="first_name" class="text-gray-600 mb-2 block">First Name</label>
+                        <input type="text" name="first_name" id="first_name"
+                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                            placeholder="first name">
+                            <small class="text-danger">{{ form.first_name.errors|striptags }}</small>
+                    </div>
+                    <div>
+                        <label for="last_name" class="text-gray-600 mb-2 block">Last Name</label>
+                        <input type="text" name="last_name" id="last_name"
+                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                            placeholder="last name">
+                            <small class="text-danger">{{ form.last_name.errors|striptags }}</small>
+                    </div>
+                    <div>
+                        <label for="email" class="text-gray-600 mb-2 block">Email address</label>
+                        <input type="email" name="email" id="email"
+                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                            placeholder="youremail@domain.com">
+                            <small class="text-danger">{{ form.email.errors|striptags }}</small>
+                    </div>
+                    <div>
+                        <label for="password" class="text-gray-600 mb-2 block">Password</label>
+                        <input type="password" name="password" id="password"
+                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                            placeholder="*******">
+                            <small class="text-danger">{{ form.password.errors|striptags }}</small>
+                    </div>
+
+                </div>
+                <div class="mt-6">
+                    <div class="flex items-center">
+                        <input type="checkbox" name="aggrement" id="aggrement"
+                            class="text-primary focus:ring-0 rounded-sm cursor-pointer">
+                        <label for="aggrement" class="text-gray-600 ml-3 cursor-pointer">I have read and agree to the <a
+                                href="#" class="text-primary">terms & conditions</a></label>
+                    </div>
+                </div>
+                <div class="mt-4 bg-primary block w-full py-2  text-center  text-white border border-primary rounded font-medium mb-1 hover:bg-transparent hover:text-primary transition uppercase font-roboto font-medium font-medium mb-1">
+                    <button type="submit" class="text-center uppercase font-medium mb-1">Create
+                        Account</button>
+                </div>
+            </form>
+
+            <!-- login with -->
+            <div class="mt-6 flex justify-center relative">
+                <div class="text-gray-600 uppercase px-3 bg-white z-10 relative">Or signup with</div>
+                <div class="absolute left-0 top-3 w-full border-b-2 border-gray-200"></div>
+            </div>
+            <div class="mt-4 flex gap-4">
+                <a href="#"
+                    class="w-1/2 py-2 text-center text-white bg-blue-800 rounded uppercase font-roboto font-medium text-sm hover:bg-blue-700">facebook</a>
+                <a href="#"
+                    class="w-1/2 py-2 text-center text-white bg-red-600 rounded uppercase font-roboto font-medium text-sm hover:bg-red-500">google</a>
+            </div>
+            <!-- ./login with -->
+
+            <p class="mt-4 text-center text-gray-600">Already have account? <a href="{% url 'login' %}"
+                    class="text-primary">Login now</a></p>
+        </div>
+
+        <style>
+            #messageBox {
+                transition: all 0.2s ease-in-out;
+                border-radius: 10px;
+                background-color: rgba(255, 0, 0, 0.7);
+                color: white;
+                padding: 10px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+    
+            .fade-enter-active,
+            .fade-leave-active {
+                transition: opacity 0.5s;
+            }
+    
+            .fade-enter,
+            .fade-leave-to {
+                opacity: 0;
+            }
+        </style>
+    
+        <script>
+            // Wait for the DOM to be fully loaded
+            document.addEventListener("DOMContentLoaded", function () {
+                // Get the message box element
+                const messageBox = document.getElementById("messageBox");
+    
+                // Check if the message box exists
+                if (messageBox) {
+                    // Add a CSS class to apply the transition effect
+                    messageBox.classList.add("fade-enter-active");
+    
+                    // Remove the message box after a delay
+                    setTimeout(function () {
+                        messageBox.remove();
+                    }, 3000);
+                }
+            });
+        </script>
+    </div>
+    <!-- ./login -->
+
+{% endblock %}

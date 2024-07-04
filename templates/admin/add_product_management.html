@@ -1,0 +1,142 @@
+{% extends 'admin-base.html' %}
+{% load static %}
+{% block body %}
+  <style>
+
+    .box-full{
+      background-color: #ebe9e9;
+      border-radius: 28px;
+      padding: 40px 40px;
+      color: black;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    h4 {
+      color: #333;
+    }
+    th, td {
+      color: #555;
+      text-align: center; /* Center-align text */
+      padding: 8px; /* Add padding */
+    }
+    .card {
+      margin-top: 20px;
+    }
+    .btn {
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-save {
+      background-color: #4CAF50; /* Green */
+    }
+    .btn-delete {
+      background-color: #f44336; /* Red */
+    }
+  </style>
+  <div class="container" style="padding-top: 60px;">
+    <div class="box-full">
+    <!-- Display success message -->
+    {% if messages %}
+    <div class="row">
+      <div class="col s12">
+        {% for message in messages %}
+        <div class="card green lighten-4">
+          <div class="card-content">
+            <span class="green-text text-darken-2">{{ message }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    
+    <!-- Add buttons -->
+    <div class="left-align">
+      <a href="{% url 'admin_product_management' %}" class="btn btn-small" style="background-color: black;">Go Back</a>
+    </div>
+    
+    <!-- Existing form for updating products -->
+    
+    <table>
+        <tr>
+            <th></th> <!-- Placeholder for table header -->
+            <th class="text-xl">Add Product</th>
+            <th></th> <!-- Placeholder for table header -->
+        </tr>
+        <tr>
+            <td></td> <!-- Placeholder for empty table cell -->
+            <td> <!-- Start of table column containing the form -->
+              <form method="post">
+                {% csrf_token %}
+                <input type="text" name="name" placeholder="Name" required><br>
+                <input type="text" name="description" placeholder="Description" required><br>
+                <input type="text" name="price" placeholder="Price" required><br>
+                <input type="text" name="discounted_price" placeholder="Discounted Price"><br>
+                <div class="input-field">
+                    <input type="hidden" name="category_id">
+                    <select name="category_id" class="browser-default" required>
+                        <option value="" disabled selected>Choose Category</option>
+                        {% for category in category_objects %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div><br>
+                <div class="input-field">
+                    <input type="hidden" name="subcategory_id">
+                    <select name="subcategory_id" class="browser-default" required>
+                        <option value="" disabled selected>Choose Subcategory</option>
+                        {% for subcategory in subcategory_objects %}
+                            <option value="{{ subcategory.id }}">{{ subcategory.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div><br>
+                <input type="text" name="quantity" placeholder="Quantity" required><br>
+                
+                <div class="input-field">
+                    <select name="event" class="browser-default">
+                        <option value="" selected>Choose Event (optional)</option>
+                        {% for event in all_event_objects %}
+                            <option value="{{ event.id }}">{{ event.event }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <br><br>
+                <input type="text" name="material" placeholder="Material" required><br>
+                <input type="text" name="weight" placeholder="Weight" required><br>
+                <input type="text" name="warranty_year" placeholder="Warranty Year" required><br>
+                <input type="text" name="warranty_policy" placeholder="Warranty Policy" required><br>
+                <button type="submit" class="btn btn-save"><i class="fas fa-save"></i> Add Product</button>
+            </form>
+            
+            </td> 
+            <td></td> 
+        </tr>
+    </table>
+  </div>
+  </div>
+
+  <!-- Materialize JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('select');
+      var instances = M.FormSelect.init(elems);
+  
+      // Hide success message after 2 seconds
+      setTimeout(function() {
+        var successMessages = document.querySelectorAll('.green-text');
+        successMessages.forEach(function(message) {
+          message.parentElement.parentElement.remove();
+        });
+      }, 2000);
+    });
+  </script>
+  
+  {% endblock %}
