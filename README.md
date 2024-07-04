@@ -9,19 +9,25 @@ Some demo screenshots of the website that highlighted the feature:
 
 
 # Shop Page:
- ![image](https://github.com/Nazmul246/RAFCRAFT/assets/115549117/de3e262f-c879-426b-917a-fe8eaf4b39a6)
+ ![image](https://github.com/al-saad10/RAFCRAFT/assets/84707924/4090ec0a-78ea-47b2-ad37-56267d0b55a9)
+
 
 # Cart Page:
- ![image](https://github.com/Nazmul246/RAFCRAFT/assets/115549117/36730e43-e17a-4992-b495-04fed8292f60)
+ ![image](https://github.com/al-saad10/RAFCRAFT/assets/84707924/116ad67a-9144-45b7-9ca4-1e156665ce6a)
+
 
 # Admin:
- ![image](https://github.com/Nazmul246/RAFCRAFT/assets/115549117/6c25f31b-90e4-4e01-be44-4ab8a7692b2a)
+ ![image](https://github.com/al-saad10/RAFCRAFT/assets/84707924/f2132654-a779-466e-8f64-159bf61cac05)
 
-![image](https://github.com/Nazmul246/RAFCRAFT/assets/115549117/fe6a2081-6e3c-4dcc-b146-168d9e4d4084)
 
-![image](https://github.com/Nazmul246/RAFCRAFT/assets/115549117/a2ed392d-8368-46dc-8019-65dd2a4173a9)
+![image](https://github.com/al-saad10/RAFCRAFT/assets/84707924/0c4af7f9-36a3-4360-a439-1db4d26cdebd)
+
+
+![image](https://github.com/al-saad10/RAFCRAFT/assets/84707924/031eca19-3bd8-4b56-9316-9c2f05f1a0f2)
+
  
-![image](https://github.com/Nazmul246/RAFCRAFT/assets/115549117/c63cbb4e-fea8-4b80-a72c-5591bbe96a85)
+![image](https://github.com/al-saad10/RAFCRAFT/assets/84707924/789dfd47-9ece-4bfc-b8b3-7f42da301152)
+
 
  
 
